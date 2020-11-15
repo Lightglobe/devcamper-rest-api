@@ -12,5 +12,8 @@
   },
   "author": "",
   "license": "ISC",
-  "homepage": "https://bitbucket.org/AlexTsambalos/devcamper-rest-api#readme"
+  "homepage": "https://bitbucket.org/AlexTsambalos/devcamper-rest-api#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
 }
