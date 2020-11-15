@@ -4,4 +4,4 @@ pipelines:
   default:
     - step:
         script:
-          - git push --mirror git@https://github.com/Lightglobe/devcamper-rest-api.git
+          - git push --mirror git@github.com/Lightglobe/devcamper-rest-api.git
