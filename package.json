@@ -4,7 +4,7 @@
   "description": "This README would normally document whatever steps are necessary to get your application up and running.",
   "main": "server.js",
   "scripts": {
-    "start": "SET NODE_ENV=production node server",
+    "start": "SET NODE_ENV=production & node server",
     "dev": "nodemon server"
   },
   "repository": {
@@ -15,8 +15,11 @@
   "license": "ISC",
   "homepage": "https://bitbucket.org/AlexTsambalos/devcamper-rest-api#readme",
   "dependencies": {
+    "colors": "^1.4.0",
     "dotenv": "^8.2.0",
-    "express": "^4.17.1"
+    "express": "^4.17.1",
+    "mongoose": "^5.10.15",
+    "morgan": "^1.10.0"
   },
   "devDependencies": {
     "nodemon": "^2.0.6"
