@@ -12,6 +12,7 @@ connectDB();
 
 //Load routes
 const bootcamps = require("./routes/bootcamps");
+const courses = require("./routes/courses");
 
 const app = express();
 
@@ -29,6 +30,7 @@ app.use(logger);
 
 // mount routes
 app.use("/api/v1/bootcamps", bootcamps);
+app.use("/api/v1/courses", courses);
 
 //has to be always under route mount
 app.use(errorHandler);

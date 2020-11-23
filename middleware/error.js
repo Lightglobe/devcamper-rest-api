@@ -3,7 +3,7 @@ const ErrorResponse = require("../utils/errorResponse");
 const errorHandler = (err, req, res, next) => {
   let error = { ...err };
   //Log to console for developer
-  // console.log(err.stack.red);
+  console.log(err.stack.red);
 
   // Mongoose bad objectId
   error.message = err.message;
