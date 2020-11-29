@@ -28,7 +28,6 @@ if (process.env.NODE_ENV === "development") {
 
 //Load and mount logger
 const logger = require("./middleware/logger");
-const { allowedNodeEnvironmentFlags } = require("process");
 app.use(logger);
 
 // File upload middleware

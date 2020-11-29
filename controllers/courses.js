@@ -2,30 +2,25 @@ const Course = require("../models/Course");
 const asyncHandler = require("../middleware/async");
 const ErrorResponse = require("../utils/errorResponse");
 const Bootcamp = require("../models/Bootcamp");
+const { restart } = require("nodemon");
 // @desc Get all courses
 // @route GET /api/v1/courses
 // @route GET /api/v1/bootcamps/:bootcampId/courses
 // @access Public
 
 exports.getCourses = asyncHandler(async (req, res, next) => {
-  let query;
   console.log(req.params);
   //Route split based on existence of bootcamp id
   if (req.params.bootcampId) {
-    query = Course.find({ bootcamp: req.params.bootcampId });
-  } else {
-    //populate:replace bootcamp id with bootcamp record
-    query = Course.find().populate({
-      path: "bootcamp",
-      select: "name description",
+    courses = await Course.find({ bootcamp: req.params.bootcampId });
+    return res.status(200).json({
+      success: true,
+      cout: courses.length,
+      data: course,
     });
+  } else {
+    res.status(200).json(res.advancedResults);
   }
-  const courses = await query;
-  res.status(200).json({
-    success: true,
-    count: courses.length,
-    data: courses,
-  });
 });
 
 // @desc Create a new course
