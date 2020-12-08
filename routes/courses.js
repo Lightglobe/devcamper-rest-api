@@ -11,10 +11,12 @@ const Course = require("../models/Course");
 // We are merging the url params because it's a shared resource with bootcamp
 const router = express.Router({ mergeParams: true });
 
+const { protect } = require("../middleware/auth");
+
 //Courses routes without any parameters
 router
   .route("/")
-  .post(createCourse)
+  .post(protect, createCourse)
   .get(
     advancedResults(Course, {
       path: "bootcamp",
@@ -23,6 +25,10 @@ router
     getCourses
   );
 
-router.route("/:id").get(getCourse).put(updateCourse).delete(deleteCourse);
+router
+  .route("/:id")
+  .get(getCourse)
+  .put(protect, updateCourse)
+  .delete(protect, deleteCourse);
 
 module.exports = router;
