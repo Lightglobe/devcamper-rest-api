@@ -56,9 +56,69 @@ exports.login = asyncHandler(async (req, res, next) => {
 // @route POST /api/v1/auth/me
 // @access Private
 exports.getMe = asyncHandler(async (req, res, next) => {
+  // remember req.user is coming from auth middleware after login
   const user = await User.findById(req.user.id);
 
+  if (!user) {
+    return next(
+      new ErrorResponse(`User with the id ${req.user.id} is not found`),
+      404
+    );
+  }
   res.status(200).json({ success: true, data: user });
+});
+
+// @desc Update user details
+// @route PUT /api/v1/auth/updatedetails
+// @access Private
+exports.updateDetails = asyncHandler(async (req, res, next) => {
+  let user = await User.findById(req.user.id);
+  if (!user) {
+    return next(
+      new ErrorResponse(`User with the id ${req.user.id} is not found`),
+      404
+    );
+  }
+
+  //allow to update at least one of the following fields
+  let fieldsToUpdate = {};
+  req.body.email ? (fieldsToUpdate.email = req.body.email) : null;
+  req.body.name ? (fieldsToUpdate.name = req.body.name) : null;
+
+  user = await User.findByIdAndUpdate(req.user.id, fieldsToUpdate, {
+    new: true,
+    runValidators: true,
+  });
+  res.status(200).json({ success: true, data: user });
+});
+
+// @desc Update user password
+// @route PUT /api/v1/auth/updatepassword
+// @access Private
+exports.updatePassword = asyncHandler(async (req, res, next) => {
+  //by default in the User model, the password is not selected
+  let user = await User.findById(req.user.id).select("+password");
+  if (!user) {
+    return next(
+      new ErrorResponse(`User with the id ${req.user.id} is not found`),
+      404
+    );
+  }
+  //check current password
+  if (!user.matchPassword(req.body.currentPassword)) {
+    return next(new ErrorResponse(`The current password is incorrect`), 401);
+  }
+
+  user.password = req.body.newPassword;
+
+  //run against validation errors
+  try {
+    await user.save();
+  } catch (error) {
+    return next(new ErrorResponse(error));
+  }
+
+  sendTokenResponse(user, 200, res);
 });
 
 // @desc Forgot password
