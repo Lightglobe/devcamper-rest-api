@@ -15,7 +15,7 @@ exports.getCourses = asyncHandler(async (req, res, next) => {
     courses = await Course.find({ bootcamp: req.params.bootcampId });
     return res.status(200).json({
       success: true,
-      cout: courses.length,
+      count: courses.length,
       data: course,
     });
   } else {
