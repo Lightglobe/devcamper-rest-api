@@ -9,8 +9,7 @@ const errorHandler = (err, req, res, next) => {
   error.message = err.message;
 
   if (err.name === "CastError") {
-    const message = "Resource not found";
-    error = new ErrorResponse(message, 404);
+    error = new ErrorResponse("Resource not found", 404);
   }
 
   //mongoose dublicate key error
