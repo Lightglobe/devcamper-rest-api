@@ -7,6 +7,12 @@ const fileupload = require("express-fileupload");
 const colors = require("colors");
 const path = require("path");
 const cookieParser = require("cookie-parser");
+const mongoSanitize = require("express-mongo-sanitize");
+const helemet = require("helmet");
+const xssClean = require("xss-clean");
+const hpp = require("hpp");
+const rateLimit = require("express-rate-limit");
+const cors = require("cors");
 //Load env vars
 dotenv.config({ path: "./config/config.env" });
 
@@ -18,6 +24,8 @@ const bootcamps = require("./routes/bootcamps");
 const courses = require("./routes/courses");
 const auth = require("./routes/auth");
 const users = require("./routes/users");
+const reviews = require("./routes/reviews");
+
 const app = express();
 
 // Body Parser
@@ -38,6 +46,29 @@ app.use(logger);
 // File upload middleware
 app.use(fileupload());
 
+//Sanitize data
+app.use(mongoSanitize());
+
+// Set security headers
+app.use(helemet());
+
+// Xss prevention
+app.use(xssClean());
+
+// Rate limiting
+const limiter = rateLimit({
+  windowMs: 10 * 60 * 1000, //10mins
+  max: 100,
+});
+
+app.use(limiter);
+
+// Prevent http pollution
+app.use(hpp());
+
+// Enable Cors
+app.use(cors());
+
 // Set static folder
 app.use(express.static(path.join(__dirname, "public")));
 
@@ -46,6 +77,7 @@ app.use("/api/v1/bootcamps", bootcamps);
 app.use("/api/v1/courses", courses);
 app.use("/api/v1/auth", auth);
 app.use("/api/v1/users", users);
+app.use("/api/v1/reviews", reviews);
 //has to be always under route mount
 app.use(errorHandler);
 
