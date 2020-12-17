@@ -9,7 +9,7 @@ const errorHandler = (err, req, res, next) => {
   error.message = err.message;
 
   if (err.name === "CastError") {
-    const message = `Resource not found`;
+    const message = "Resource not found";
     error = new ErrorResponse(message, 404);
   }
 
